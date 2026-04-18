@@ -18,31 +18,29 @@ const FOOTER_LINKS = {
   ],
   Company: [
     { label: "About us", href: "/about" },
-    { label: "Certifications", href: "/about" },
+    { label: "Services", href: "/services" },
     { label: "Free consultation", href: "/consultation" },
     { label: "How it works", href: "/how-it-works" },
-    { label: "Lagos office", href: "/about" },
-    { label: "Abuja office", href: "/about" },
+    { label: "Get a quote", href: "/get-a-quote" },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0d1117] text-white pt-16 pb-8 px-8 border-t border-white/5">
+    <footer className="bg-dark text-white pt-16 pb-8 px-8 border-t border-white/5">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-14">
           {/* Brand */}
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <span className="w-8 h-8 rounded-md bg-[#c9a84c] flex items-center justify-center text-black font-bold text-sm">E</span>
+              <span className="w-8 h-8 bg-brand flex items-center justify-center text-black font-bold text-sm" style={{ borderRadius: "var(--radius)" }}>E</span>
               <div className="leading-tight">
                 <span className="block text-white font-semibold text-sm">Eshmart</span>
-                <span className="block text-[#c9a84c] font-semibold text-sm">SmartTech</span>
+                <span className="block text-brand font-semibold text-sm">SmartTech</span>
               </div>
             </Link>
             <p className="text-white/40 text-xs leading-relaxed mb-5">
-              Nigeria&apos;s certified smart home automation and security specialists.
-              Lagos &amp; Abuja.
+              Nigeria&apos;s certified smart home automation and security specialists. Lagos &amp; Abuja.
             </p>
             <div className="space-y-1.5 text-xs text-white/40">
               <p>Lagos: +234 (0) 801 000 0001</p>
@@ -52,16 +50,13 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
           {Object.entries(FOOTER_LINKS).map(([title, links]) => (
             <div key={title}>
               <p className="text-xs font-bold tracking-widest text-white/30 uppercase mb-5">{title}</p>
               <ul className="space-y-3 text-sm text-white/50">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <Link href={link.href} className="hover:text-[#c9a84c] transition-colors">
-                      {link.label}
-                    </Link>
+                    <Link href={link.href} className="hover:text-brand transition-colors">{link.label}</Link>
                   </li>
                 ))}
               </ul>

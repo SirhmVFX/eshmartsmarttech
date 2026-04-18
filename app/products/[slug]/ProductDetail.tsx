@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
+import { useCart } from "@/context/CartContext";
 import type { Product } from "@/lib/products";
 
 type Props = { product: Product; related: Product[] };
@@ -13,6 +14,14 @@ export default function ProductDetail({ product, related }: Props) {
   const [imgIndex, setImgIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<"overview" | "specs" | "faqs">("overview");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const { addToCart, toggleFavourite, isFavourite } = useCart();
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  const handleAddToCart = () => {
+    addToCart({ slug: product.slug, name: product.name, price: product.price, image: product.image, category: product.category });
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 2000);
+  };
 
   return (
     <div className="min-h-screen bg-[#f5f5f0] font-sans">
@@ -72,7 +81,16 @@ export default function ProductDetail({ product, related }: Props) {
                   BOOK SITE SURVEY
                 </a>
               </div>
-            </div>
+              <div className="flex gap-3 mt-3">
+                <button onClick={handleAddToCart}
+                  className={`flex-1 font-bold text-xs tracking-widest py-3 rounded-full border transition-colors ${addedToCart ? "bg-green-500 border-green-500 text-white" : "border-black/15 text-black hover:border-[#c9a84c] hover:text-[#c9a84c]"}`}>
+                  {addedToCart ? "✓ ADDED TO CART" : "ADD TO CART"}
+                </button>
+                <button onClick={() => toggleFavourite(product.slug)}
+                  className={`w-12 h-12 rounded-full border flex items-center justify-center text-lg transition-colors ${isFavourite(product.slug) ? "bg-red-50 border-red-300 text-red-400" : "border-black/15 text-black/40 hover:border-red-300 hover:text-red-400"}`}>
+                  {isFavourite(product.slug) ? "♥" : "♡"}
+                </button>
+              </div>            </div>
 
             {/* Trust badges */}
             <div className="grid grid-cols-3 gap-3 mb-6">
