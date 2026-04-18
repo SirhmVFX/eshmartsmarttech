@@ -46,28 +46,28 @@ function HeroSection() {
               Professional installation of smart home automation, biometric access control, remote gate systems, CCTV, and solar power — backed by a signed 24-hour response SLA.
             </p>
             <div className="flex items-center gap-4 flex-wrap">
-              <Link href="/consultation" className="flex items-center gap-2 bg-[#c9a84c] text-black font-semibold text-sm px-6 py-3 rounded-full hover:bg-[#b8963e] transition-colors">GET A FREE QUOTE →</Link>
-              <Link href="/how-it-works" className="text-sm font-semibold text-white border border-white/30 px-6 py-3 rounded-full hover:bg-white/10 transition-colors">HOW IT WORKS</Link>
+              <Link href="/consultation" className="flex items-center gap-2 bg-[#c9a84c] text-black font-semibold text-sm px-6 py-3 rounded-sm hover:bg-[#b8963e] transition-colors">GET A FREE QUOTE →</Link>
+              <Link href="/how-it-works" className="text-sm font-semibold text-white border border-white/30 px-6 py-3 rounded-sm hover:bg-white/10 transition-colors">HOW IT WORKS</Link>
             </div>
             <div className="mt-6 flex items-center gap-3">
               <div className="flex -space-x-2">
                 {["bg-amber-400", "bg-amber-600", "bg-yellow-300"].map((c, i) => (
-                  <div key={i} className={`w-8 h-8 rounded-full border-2 border-[#0d1117] ${c}`} />
+                  <div key={i} className={`w-8 h-8 rounded-sm border-2 border-[#0d1117] ${c}`} />
                 ))}
               </div>
               <span className="text-white/50 text-sm">Trusted by 500+ homes across Lagos &amp; Abuja</span>
             </div>
           </div>
           <div className="flex flex-col gap-3 min-w-[260px]">
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-lg px-4 py-3 text-sm text-white/80">
-              <span className="w-2 h-2 rounded-full bg-[#c9a84c]" />EEE-qualified technical team
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-sm px-4 py-3 text-sm text-white/80">
+              <span className="w-2 h-2 rounded-sm bg-[#c9a84c]" />EEE-qualified technical team
             </div>
             {[
               { stat: "500+", desc: "Installations completed across Lagos & Abuja" },
               { stat: "24 hr", desc: "Guaranteed response SLA on all maintenance contracts" },
               { stat: "2 yr", desc: "Installation warranty — industry's strongest guarantee" },
             ].map(({ stat, desc }) => (
-              <div key={stat} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-5 py-4">
+              <div key={stat} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-sm px-5 py-4">
                 <p className="text-[#c9a84c] text-2xl font-bold mb-1">{stat}</p>
                 <p className="text-white/60 text-sm leading-snug">{desc}</p>
               </div>
@@ -92,20 +92,20 @@ function AboutSection() {
     <section className="bg-[#f5f5f0] text-black py-20 px-8">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
         <div className="w-full md:w-1/2 grid grid-cols-2 grid-rows-2 gap-3 h-[420px]">
-          <div className="bg-[#1a1a2e] rounded-2xl p-5 flex flex-col justify-between">
+          <div className="bg-[#1a1a2e] rounded-sm p-5 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <span className="w-6 h-6 rounded-md bg-[#c9a84c] flex items-center justify-center text-black font-bold text-xs">E</span>
+                <span className="w-6 h-6 rounded-sm bg-[#c9a84c] flex items-center justify-center text-black font-bold text-xs">E</span>
                 <span className="text-[#c9a84c] font-semibold text-sm">Eshmart</span>
               </div>
               <p className="text-white/80 text-sm leading-relaxed">&ldquo;<span className="text-[#c9a84c]">Eshmart</span> transformed our office security — zero incidents since installation.&rdquo;</p>
             </div>
-            <button className="mt-4 self-start text-xs font-semibold border border-white/30 text-white px-4 py-2 rounded-full hover:bg-white/10 transition-colors">Read Testimonials</button>
+            <button className="mt-4 self-start text-xs font-semibold border border-white/30 text-white px-4 py-2 rounded-sm hover:bg-white/10 transition-colors">Read Testimonials</button>
           </div>
-          <div className="rounded-2xl overflow-hidden row-span-1">
+          <div className="rounded-sm overflow-hidden row-span-1">
             <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&q=80" alt="Eshmart technician" className="w-full h-full object-cover" />
           </div>
-          <div className="col-span-2 rounded-2xl overflow-hidden">
+          <div className="col-span-2 rounded-sm overflow-hidden">
             <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Smart home installation" className="w-full h-full object-cover" />
           </div>
         </div>
@@ -116,7 +116,7 @@ function AboutSection() {
           </div>
           <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-5">Smart Security for<br />Homes &amp; Businesses</h2>
           <p className="text-black/60 text-base leading-relaxed mb-10 max-w-md">Our mission is simple — to help you protect what matters most with intelligent technology. From biometric access control to CCTV and solar power, we deliver certified installations backed by a signed 24-hour response SLA.</p>
-          <Link href="/consultation" className="inline-flex items-center gap-2 bg-[#c9a84c] text-black font-semibold text-sm px-6 py-3 rounded-full hover:bg-[#b8963e] transition-colors">GET A FREE QUOTE →</Link>
+          <Link href="/consultation" className="inline-flex items-center gap-2 bg-[#c9a84c] text-black font-semibold text-sm px-6 py-3 rounded-sm hover:bg-[#b8963e] transition-colors">GET A FREE QUOTE →</Link>
         </div>
       </div>
     </section>
@@ -152,17 +152,17 @@ function ProductsSection() {
             const highlight = active === p.id || hovered === p.id;
             return (
               <div key={p.id} onMouseEnter={() => setHovered(p.id)} onMouseLeave={() => setHovered(null)} onClick={() => setActive(active === p.id ? null : p.id)}
-                className={`relative rounded-2xl border p-6 cursor-pointer transition-all duration-300 overflow-hidden ${highlight ? "bg-[#1a1a2e] border-[#c9a84c] text-white shadow-xl shadow-[#c9a84c]/10 -translate-y-1" : "bg-white border-black/8 text-black hover:border-[#c9a84c]/40"}`}>
-                {p.tag && <span className="absolute top-4 right-4 text-[10px] font-bold tracking-widest bg-[#c9a84c] text-black px-2.5 py-1 rounded-full">{p.tag}</span>}
-                <div className={`absolute inset-0 bg-linear-to-br from-[#c9a84c]/5 to-transparent rounded-2xl transition-opacity duration-300 ${highlight ? "opacity-100" : "opacity-0"}`} />
+                className={`relative rounded-sm border p-6 cursor-pointer transition-all duration-300 overflow-hidden ${highlight ? "bg-[#1a1a2e] border-[#c9a84c] text-white shadow-xl shadow-[#c9a84c]/10 -translate-y-1" : "bg-white border-black/8 text-black hover:border-[#c9a84c]/40"}`}>
+                {p.tag && <span className="absolute top-4 right-4 text-[10px] font-bold tracking-widest bg-[#c9a84c] text-black px-2.5 py-1 rounded-sm">{p.tag}</span>}
+                <div className={`absolute inset-0 bg-linear-to-br from-[#c9a84c]/5 to-transparent rounded-sm transition-opacity duration-300 ${highlight ? "opacity-100" : "opacity-0"}`} />
                 <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-lg mb-4 transition-colors duration-300 ${highlight ? "bg-[#c9a84c]/20 text-[#c9a84c]" : "bg-black/5 text-black/40"}`}>{p.icon}</div>
                 <h3 className={`relative font-bold text-base mb-2 transition-colors duration-300 ${highlight ? "text-white" : "text-black"}`}>{p.name}</h3>
                 <p className={`relative text-sm leading-relaxed mb-4 transition-colors duration-300 ${highlight ? "text-white/60" : "text-black/50"}`}>{p.desc}</p>
                 <ul className={`relative space-y-1.5 mb-5 overflow-hidden transition-all duration-300 ${highlight ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}`}>
-                  {p.features.map((f) => <li key={f} className="flex items-center gap-2 text-xs text-white/70"><span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c] shrink-0" />{f}</li>)}
+                  {p.features.map((f) => <li key={f} className="flex items-center gap-2 text-xs text-white/70"><span className="w-1.5 h-1.5 rounded-sm bg-[#c9a84c] shrink-0" />{f}</li>)}
                 </ul>
                 <Link href={p.href} onClick={(e) => e.stopPropagation()}
-                  className={`relative inline-flex items-center gap-2 text-xs font-bold tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 ${highlight ? "bg-[#c9a84c] border-[#c9a84c] text-black hover:bg-[#b8963e]" : "border-black/20 text-black/60 hover:border-[#c9a84c] hover:text-[#c9a84c]"}`}>
+                  className={`relative inline-flex items-center gap-2 text-xs font-bold tracking-widest px-5 py-2.5 rounded-sm border transition-all duration-300 ${highlight ? "bg-[#c9a84c] border-[#c9a84c] text-black hover:bg-[#b8963e]" : "border-black/20 text-black/60 hover:border-[#c9a84c] hover:text-[#c9a84c]"}`}>
                   GET A QUOTE →
                 </Link>
               </div>
@@ -203,7 +203,7 @@ function SolarSection() {
           <p className="text-white/50 text-sm leading-relaxed max-w-sm md:text-right">Keep every access point, camera, and gate fully operational — even during extended grid outages.</p>
         </div>
         <div className="flex flex-col lg:flex-row gap-10 items-start">
-          <div className="w-full lg:w-[420px] shrink-0 bg-[#111827] border border-white/10 rounded-2xl p-6">
+          <div className="w-full lg:w-[420px] shrink-0 bg-[#111827] border border-white/10 rounded-sm p-6">
             <p className="text-[10px] font-bold tracking-widest text-white/30 uppercase mb-5">System Capacity Simulator</p>
             <div className="grid grid-cols-8 gap-1.5 mb-6">
               {Array.from({ length: 40 }).map((_, i) => (
@@ -219,12 +219,12 @@ function SolarSection() {
               <p className="text-white/40 text-[10px] uppercase tracking-widest mb-3">System Size</p>
               <div className="flex items-center justify-between gap-2">
                 {SYSTEM_SIZES.map((s) => (
-                  <button key={s} onClick={() => setSize(s)} className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-200 ${size === s ? "bg-[#c9a84c] text-black" : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/70"}`}>{s} kW</button>
+                  <button key={s} onClick={() => setSize(s)} className={`flex-1 py-2 rounded-sm text-xs font-bold transition-all duration-200 ${size === s ? "bg-[#c9a84c] text-black" : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/70"}`}>{s} kW</button>
                 ))}
               </div>
-              <div className="relative mt-3 h-1 bg-white/10 rounded-full">
-                <div className="absolute top-0 h-1 bg-[#c9a84c] rounded-full transition-all duration-300" style={{ width: `${(SYSTEM_SIZES.indexOf(size) / (SYSTEM_SIZES.length - 1)) * 100}%` }} />
-                <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#c9a84c] rounded-full border-2 border-[#0d1117] transition-all duration-300" style={{ left: `calc(${(SYSTEM_SIZES.indexOf(size) / (SYSTEM_SIZES.length - 1)) * 100}% - 6px)` }} />
+              <div className="relative mt-3 h-1 bg-white/10 rounded-sm">
+                <div className="absolute top-0 h-1 bg-[#c9a84c] rounded-sm transition-all duration-300" style={{ width: `${(SYSTEM_SIZES.indexOf(size) / (SYSTEM_SIZES.length - 1)) * 100}%` }} />
+                <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#c9a84c] rounded-sm border-2 border-[#0d1117] transition-all duration-300" style={{ left: `calc(${(SYSTEM_SIZES.indexOf(size) / (SYSTEM_SIZES.length - 1)) * 100}% - 6px)` }} />
               </div>
             </div>
           </div>
@@ -235,7 +235,7 @@ function SolarSection() {
                 <div><h4 className="font-bold text-sm mb-1 group-hover:text-[#c9a84c] transition-colors duration-300">{f.title}</h4><p className="text-white/50 text-sm leading-relaxed">{f.desc}</p></div>
               </div>
             ))}
-            <Link href="/products/solar-power-system" className="mt-4 self-start inline-flex items-center gap-2 bg-[#c9a84c] text-black font-bold text-xs tracking-widest px-6 py-3 rounded-full hover:bg-[#b8963e] transition-colors">GET A SOLAR QUOTE →</Link>
+            <Link href="/products/solar-power-system" className="mt-4 self-start inline-flex items-center gap-2 bg-[#c9a84c] text-black font-bold text-xs tracking-widest px-6 py-3 rounded-sm hover:bg-[#b8963e] transition-colors">GET A SOLAR QUOTE →</Link>
           </div>
         </div>
       </div>
@@ -270,7 +270,7 @@ function HowItWorksSection() {
               const isActive = activeStep === step.n;
               return (
                 <div key={step.n} className="flex flex-col items-center text-center cursor-pointer group" onClick={() => setActiveStep(isActive ? null : step.n)}>
-                  <div className={`relative z-10 w-14 h-14 rounded-full border-2 flex items-center justify-center text-lg font-bold mb-5 transition-all duration-300 ${isActive ? "bg-[#c9a84c] border-[#c9a84c] text-black scale-110 shadow-lg shadow-[#c9a84c]/30" : "bg-[#f5f5f0] border-[#c9a84c] text-[#c9a84c] group-hover:bg-[#c9a84c]/10"}`}>{step.n}</div>
+                  <div className={`relative z-10 w-14 h-14 rounded-sm border-2 flex items-center justify-center text-lg font-bold mb-5 transition-all duration-300 ${isActive ? "bg-[#c9a84c] border-[#c9a84c] text-black scale-110 shadow-lg shadow-[#c9a84c]/30" : "bg-[#f5f5f0] border-[#c9a84c] text-[#c9a84c] group-hover:bg-[#c9a84c]/10"}`}>{step.n}</div>
                   <h3 className={`font-bold text-sm mb-2 transition-colors duration-300 ${isActive ? "text-[#c9a84c]" : "text-black"}`}>{step.title}</h3>
                   <p className={`text-sm leading-relaxed transition-all duration-300 ${isActive ? "text-black/70 max-h-40" : "text-black/40 max-h-40 md:max-h-0 md:overflow-hidden md:opacity-0 group-hover:max-h-40 group-hover:opacity-100 group-hover:text-black/60"}`}>{step.desc}</p>
                 </div>
@@ -279,7 +279,7 @@ function HowItWorksSection() {
           </div>
         </div>
         <div className="mt-14 flex justify-center">
-          <Link href="/consultation" className="inline-flex items-center gap-2 bg-[#c9a84c] text-black font-bold text-xs tracking-widest px-8 py-3.5 rounded-full hover:bg-[#b8963e] transition-colors">BOOK FREE CONSULTATION →</Link>
+          <Link href="/consultation" className="inline-flex items-center gap-2 bg-[#c9a84c] text-black font-bold text-xs tracking-widest px-8 py-3.5 rounded-sm hover:bg-[#b8963e] transition-colors">BOOK FREE CONSULTATION →</Link>
         </div>
       </div>
     </section>
@@ -297,13 +297,13 @@ function ConsultationSection() {
           <ul className="space-y-4">
             {["45-minute on-site security assessment at no charge","Written gap analysis of your current systems","No-obligation product recommendations","Available in Lagos and Abuja — same week appointments","Conducted by EEE-qualified technical lead"].map((item) => (
               <li key={item} className="flex items-start gap-3 text-sm text-white/60">
-                <span className="mt-1 w-4 h-4 rounded-full border border-[#c9a84c]/50 flex items-center justify-center shrink-0"><span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]" /></span>
+                <span className="mt-1 w-4 h-4 rounded-sm border border-[#c9a84c]/50 flex items-center justify-center shrink-0"><span className="w-1.5 h-1.5 rounded-sm bg-[#c9a84c]" /></span>
                 {item}
               </li>
             ))}
           </ul>
         </div>
-        <div className="w-full lg:w-[440px] bg-[#111827] border border-white/10 rounded-2xl p-7">
+        <div className="w-full lg:w-[440px] bg-[#111827] border border-white/10 rounded-sm p-7">
           <ConsultationForm />
         </div>
       </div>
@@ -338,31 +338,31 @@ function TestimonialsSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[0, 1].map((idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-black/6 p-6 flex flex-col justify-between">
+            <div key={idx} className="bg-white rounded-sm border border-black/6 p-6 flex flex-col justify-between">
               <div><span className="text-4xl font-serif text-black/15 leading-none block mb-3">&ldquo;</span><p className="text-sm leading-relaxed text-black/70 mb-4">{TESTIMONIALS[idx].quote}</p><Stars count={TESTIMONIALS[idx].stars} /></div>
               <div className="flex items-center gap-3 mt-6 pt-5 border-t border-black/6">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white ${TESTIMONIALS[idx].color}`}>{TESTIMONIALS[idx].initials}</div>
+                <div className={`w-10 h-10 rounded-sm flex items-center justify-center text-xs font-bold text-white ${TESTIMONIALS[idx].color}`}>{TESTIMONIALS[idx].initials}</div>
                 <div><p className="text-sm font-bold">{TESTIMONIALS[idx].name}</p><p className="text-xs text-black/40">{TESTIMONIALS[idx].role}</p></div>
               </div>
             </div>
           ))}
-          <div className="relative rounded-2xl overflow-hidden row-span-2 min-h-64 cursor-pointer group" onClick={() => setVideoPlaying(videoPlaying === "v1" ? null : "v1")}>
+          <div className="relative rounded-sm overflow-hidden row-span-2 min-h-64 cursor-pointer group" onClick={() => setVideoPlaying(videoPlaying === "v1" ? null : "v1")}>
             <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80" alt="Video testimonial" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-4 left-4 right-4"><Stars count={5} /><p className="text-white font-bold text-sm mt-1">Kemi Adeyemi</p><p className="text-white/60 text-xs">Estate Manager, Lekki</p></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center group-hover:bg-white/30 transition-colors"><span className="text-white text-lg ml-0.5">▶</span></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-sm bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center group-hover:bg-white/30 transition-colors"><span className="text-white text-lg ml-0.5">▶</span></div>
           </div>
-          <div className="relative rounded-2xl overflow-hidden min-h-56 cursor-pointer group" onClick={() => setVideoPlaying(videoPlaying === "v2" ? null : "v2")}>
+          <div className="relative rounded-sm overflow-hidden min-h-56 cursor-pointer group" onClick={() => setVideoPlaying(videoPlaying === "v2" ? null : "v2")}>
             <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Video testimonial" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-4 left-4 right-4"><Stars count={5} /><p className="text-white font-bold text-sm mt-1">Emeka Obi</p><p className="text-white/60 text-xs">Industrial Client</p></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center group-hover:bg-white/30 transition-colors"><span className="text-white text-lg ml-0.5">▶</span></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-sm bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center group-hover:bg-white/30 transition-colors"><span className="text-white text-lg ml-0.5">▶</span></div>
           </div>
           {[2, 3].map((idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-black/6 p-6 flex flex-col justify-between">
+            <div key={idx} className="bg-white rounded-sm border border-black/6 p-6 flex flex-col justify-between">
               <div><span className="text-4xl font-serif text-black/15 leading-none block mb-3">&ldquo;</span><p className="text-sm leading-relaxed text-black/70 mb-4">{TESTIMONIALS[idx].quote}</p><Stars count={TESTIMONIALS[idx].stars} /></div>
               <div className="flex items-center gap-3 mt-6 pt-5 border-t border-black/6">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white ${TESTIMONIALS[idx].color}`}>{TESTIMONIALS[idx].initials}</div>
+                <div className={`w-10 h-10 rounded-sm flex items-center justify-center text-xs font-bold text-white ${TESTIMONIALS[idx].color}`}>{TESTIMONIALS[idx].initials}</div>
                 <div><p className="text-sm font-bold">{TESTIMONIALS[idx].name}</p><p className="text-xs text-black/40">{TESTIMONIALS[idx].role}</p></div>
               </div>
             </div>
@@ -399,7 +399,7 @@ function WhyUsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {WHY_US.map((item, i) => (
             <div key={item.title} onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}
-              className={`rounded-2xl border p-7 transition-all duration-300 cursor-default ${hovered === i ? "bg-white text-black border-white shadow-xl shadow-white/5 -translate-y-1" : "bg-white/5 border-white/10 text-white"}`}>
+              className={`rounded-sm border p-7 transition-all duration-300 cursor-default ${hovered === i ? "bg-white text-black border-white shadow-xl shadow-white/5 -translate-y-1" : "bg-white/5 border-white/10 text-white"}`}>
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg mb-6 transition-colors duration-300 ${hovered === i ? "bg-[#c9a84c]/15 text-[#c9a84c]" : "bg-white/10 text-white/50"}`}>{item.icon}</div>
               <h3 className={`font-bold text-base mb-2 transition-colors duration-300 ${hovered === i ? "text-black" : "text-white"}`}>{item.title}</h3>
               <p className={`text-sm leading-relaxed transition-colors duration-300 ${hovered === i ? "text-black/60" : "text-white/50"}`}>{item.desc}</p>
@@ -420,25 +420,25 @@ const PROJECTS = [
 function ProjectCard({ project }: { project: (typeof PROJECTS)[number] }) {
   const [imgIndex, setImgIndex] = useState(0);
   return (
-    <div className="bg-white rounded-2xl border border-black/8 overflow-hidden flex flex-col md:flex-row">
+    <div className="bg-white rounded-sm border border-black/8 overflow-hidden flex flex-col md:flex-row">
       <div className="flex-1 p-8 flex flex-col justify-between">
         <div>
           <h3 className="text-xl font-bold mb-2">{project.name}</h3>
           <p className="text-black/50 text-sm leading-relaxed mb-5">{project.desc}</p>
-          <div className="flex flex-wrap gap-2 mb-7">{project.tags.map((tag) => <span key={tag} className="flex items-center gap-1.5 text-xs text-black/50 border border-black/10 rounded-full px-3 py-1"><span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]" />{tag}</span>)}</div>
+          <div className="flex flex-wrap gap-2 mb-7">{project.tags.map((tag) => <span key={tag} className="flex items-center gap-1.5 text-xs text-black/50 border border-black/10 rounded-sm px-3 py-1"><span className="w-1.5 h-1.5 rounded-sm bg-[#c9a84c]" />{tag}</span>)}</div>
           <p className="text-[10px] font-bold tracking-widest text-black/30 uppercase mb-3">Result</p>
           <div className="grid grid-cols-3 gap-px bg-black/8 rounded-xl overflow-hidden border border-black/8">
             {project.stats.map((s) => <div key={s.label} className="bg-white px-4 py-3"><p className="text-[10px] text-black/35 uppercase tracking-widest mb-0.5">{s.label}</p><p className="font-bold text-sm">{s.value}</p></div>)}
           </div>
         </div>
-        <a href="#" className="mt-7 self-start inline-flex items-center gap-2 bg-[#c9a84c] text-black font-bold text-xs tracking-widest px-6 py-3 rounded-full hover:bg-[#b8963e] transition-colors">VIEW PROJECT →</a>
+        <a href="#" className="mt-7 self-start inline-flex items-center gap-2 bg-[#c9a84c] text-black font-bold text-xs tracking-widest px-6 py-3 rounded-sm hover:bg-[#b8963e] transition-colors">VIEW PROJECT →</a>
       </div>
       <div className="relative w-full md:w-[420px] shrink-0 min-h-64 bg-black/5">
         <img src={project.images[imgIndex]} alt={project.name} className="w-full h-full object-cover" />
-        <button onClick={() => setImgIndex((i) => (i - 1 + project.images.length) % project.images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors text-xs">‹</button>
-        <button onClick={() => setImgIndex((i) => (i + 1) % project.images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors text-xs">›</button>
+        <button onClick={() => setImgIndex((i) => (i - 1 + project.images.length) % project.images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-sm bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors text-xs">‹</button>
+        <button onClick={() => setImgIndex((i) => (i + 1) % project.images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-sm bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors text-xs">›</button>
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-          {project.images.map((_, i) => <button key={i} onClick={() => setImgIndex(i)} className={`rounded-full transition-all duration-200 ${i === imgIndex ? "w-4 h-2 bg-white" : "w-2 h-2 bg-white/40 hover:bg-white/70"}`} />)}
+          {project.images.map((_, i) => <button key={i} onClick={() => setImgIndex(i)} className={`rounded-sm transition-all duration-200 ${i === imgIndex ? "w-4 h-2 bg-white" : "w-2 h-2 bg-white/40 hover:bg-white/70"}`} />)}
         </div>
       </div>
     </div>
