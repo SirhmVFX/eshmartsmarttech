@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ConsultationForm from "@/components/ConsultationForm";
+import { heroSlidesApi, HeroSlide, testimonialsApi, FirestoreTestimonial, blogApi, BlogPost } from "@/lib/firestore";
 
 export default function Home() {
   return (
@@ -18,36 +19,84 @@ export default function Home() {
       <TestimonialsSection />
       <WhyUsSection />
       <ProjectsSection />
+      <BlogSection />
       <Footer />
     </main>
   );
 }
 
-// ─── Hero ─────────────────────────────────────────────────────────────────────
+// ─── Hero Slider ──────────────────────────────────────────────────────────────
+
+const FALLBACK_SLIDE: HeroSlide = {
+  headline: "Protect what matters with intelligent technology",
+  subheadline: "Nigeria's Certified Smart Security Specialists",
+  description: "Professional installation of smart home automation, biometric access control, remote gate systems, CCTV, and solar power — backed by a signed 24-hour response SLA.",
+  backgroundImage: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80",
+  ctaPrimaryLabel: "GET A FREE QUOTE →",
+  ctaPrimaryHref: "/consultation",
+  ctaSecondaryLabel: "HOW IT WORKS",
+  ctaSecondaryHref: "/how-it-works",
+  badge: "Nigeria's Certified Smart Security Specialists",
+  stats: [
+    { value: "500+", label: "Installations completed across Lagos & Abuja" },
+    { value: "24 hr", label: "Guaranteed response SLA on all maintenance contracts" },
+    { value: "2 yr", label: "Installation warranty — industry's strongest guarantee" },
+  ],
+  order: 1,
+  isActive: true,
+};
+
 function HeroSection() {
+  // Start with the fallback so the hero is always visible immediately
+  const [displaySlides, setDisplaySlides] = useState<HeroSlide[]>([FALLBACK_SLIDE]);
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    heroSlidesApi.getActive()
+      .then(data => { if (data.length > 0) setDisplaySlides(data); })
+      .catch(() => { /* keep fallback */ });
+  }, []);
+
+  // Auto-advance
+  useEffect(() => {
+    if (displaySlides.length <= 1) return;
+    const timer = setInterval(() => setCurrent(c => (c + 1) % displaySlides.length), 7000);
+    return () => clearInterval(timer);
+  }, [displaySlides.length]);
+
+  const slide = displaySlides[current];
+
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden">
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80')" }} />
-      <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/50 to-[#0d1117]" />
-      <Navbar variant="transparent" />
-      <div className="relative z-10 flex flex-1 items-end">
+      {/* Animated backgrounds */}
+      {displaySlides.map((s, i) => (
+        <div key={i} className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url('${s.backgroundImage}')`, opacity: i === current ? 1 : 0, transition: 'opacity 1s ease-in-out', zIndex: 0 }} />
+      ))}
+      <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/50 to-[#0d1117]" style={{ zIndex: 1 }} />
+
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        <Navbar variant="transparent" />
+      </div>
+
+      <div className="relative flex flex-1 items-end" style={{ zIndex: 10 }}>
         <div className="w-full px-8 pb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-12">
           <div className="max-w-xl">
             <div className="flex items-center gap-2 mb-5">
               <span className="w-3 h-3 bg-[#c9a84c] rounded-sm inline-block" />
-              <span className="text-xs font-semibold tracking-widest text-white/70 uppercase">Nigeria&apos;s Certified Smart Security Specialists</span>
+              <span className="text-xs font-semibold tracking-widest text-white/70 uppercase">{slide.badge}</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-5">
-              Protect what<br />matters with{" "}
-              <em className="not-italic text-[#c9a84c] italic font-bold">intelligent</em>
-              <br />technology
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-5" style={{ transition: 'opacity 0.5s ease' }}>
+              {slide.headline}
             </h1>
-            <p className="text-white/60 text-base leading-relaxed mb-8 max-w-md">
-              Professional installation of smart home automation, biometric access control, remote gate systems, CCTV, and solar power — backed by a signed 24-hour response SLA.
-            </p>
+            <p className="text-white/60 text-base leading-relaxed mb-8 max-w-md">{slide.description}</p>
             <div className="flex items-center gap-4 flex-wrap">
-              <Link href="/consultation" className="flex items-center gap-2 bg-[#c9a84c] text-black font-semibold text-sm px-6 py-3 rounded-sm hover:bg-[#b8963e] transition-colors">GET A FREE QUOTE →</Link>
-              <Link href="/how-it-works" className="text-sm font-semibold text-white border border-white/30 px-6 py-3 rounded-sm hover:bg-white/10 transition-colors">HOW IT WORKS</Link>
+              <Link href={slide.ctaPrimaryHref} className="flex items-center gap-2 bg-[#c9a84c] text-black font-semibold text-sm px-6 py-3 rounded-sm hover:bg-[#b8963e] transition-colors">
+                {slide.ctaPrimaryLabel}
+              </Link>
+              <Link href={slide.ctaSecondaryHref} className="text-sm font-semibold text-white border border-white/30 px-6 py-3 rounded-sm hover:bg-white/10 transition-colors">
+                {slide.ctaSecondaryLabel}
+              </Link>
             </div>
             <div className="mt-6 flex items-center gap-3">
               <div className="flex -space-x-2">
@@ -62,20 +111,37 @@ function HeroSection() {
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-sm px-4 py-3 text-sm text-white/80">
               <span className="w-2 h-2 rounded-sm bg-[#c9a84c]" />EEE-qualified technical team
             </div>
-            {[
-              { stat: "500+", desc: "Installations completed across Lagos & Abuja" },
-              { stat: "24 hr", desc: "Guaranteed response SLA on all maintenance contracts" },
-              { stat: "2 yr", desc: "Installation warranty — industry's strongest guarantee" },
-            ].map(({ stat, desc }) => (
-              <div key={stat} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-sm px-5 py-4">
-                <p className="text-[#c9a84c] text-2xl font-bold mb-1">{stat}</p>
-                <p className="text-white/60 text-sm leading-snug">{desc}</p>
+            {slide.stats.map(({ value, label }) => (
+              <div key={value} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-sm px-5 py-4">
+                <p className="text-[#c9a84c] text-2xl font-bold mb-1">{value}</p>
+                <p className="text-white/60 text-sm leading-snug">{label}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
-      <div className="relative z-10 border-t border-white/10 bg-black/30 backdrop-blur-sm">
+
+      {/* Slide indicators */}
+      {displaySlides.length > 1 && (
+        <div className="absolute flex gap-2 z-20" style={{ bottom: 88, left: '50%', transform: 'translateX(-50%)' }}>
+          {displaySlides.map((_, i) => (
+            <button key={i} onClick={() => setCurrent(i)}
+              style={{ borderRadius: 2, transition: 'all 0.3s', width: i === current ? 28 : 8, height: 8, background: i === current ? '#c9a84c' : 'rgba(255,255,255,0.4)', border: 'none', cursor: 'pointer' }} />
+          ))}
+        </div>
+      )}
+
+      {/* Prev/Next arrows */}
+      {displaySlides.length > 1 && (
+        <>
+          <button onClick={() => setCurrent(c => (c - 1 + displaySlides.length) % displaySlides.length)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-sm bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors text-lg">‹</button>
+          <button onClick={() => setCurrent(c => (c + 1) % displaySlides.length)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-sm bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors text-lg">›</button>
+        </>
+      )}
+
+      <div className="relative border-t border-white/10 bg-black/30 backdrop-blur-sm" style={{ zIndex: 10 }}>
         <div className="px-8 py-4 flex flex-wrap items-center justify-center gap-x-10 gap-y-2 text-xs text-white/40 tracking-widest uppercase">
           <span>• ISO 9001 Certified</span><span>• NCC Licensed Dealer</span>
           <span>• NIEEE Registered</span><span>• An Eshmart Group Holdings Company</span>
@@ -312,7 +378,7 @@ function ConsultationSection() {
 }
 
 // ─── Testimonials ─────────────────────────────────────────────────────────────
-const TESTIMONIALS = [
+const STATIC_TESTIMONIALS = [
   { id: "ad", initials: "AD", color: "bg-amber-700", name: "Alhaji Danjuma", role: "Chairman, Pinnock Gardens Residents Association, Lagos", quote: "Eshmart SmartTech transformed the security of our 80-unit estate. The installation was professional, the documentation thorough, and the maintenance team actually shows up within hours — not days.", stars: 5 },
   { id: "co", initials: "CO", color: "bg-teal-700", name: "Chisom Okonkwo", role: "Project Director, LandWey Investment, Lagos", quote: "As a developer, we specified Eshmart SmartTech across our latest 120-unit development in Lekki. Their project coordination and technical quality set a new standard for what we expect from vendors.", stars: 5 },
   { id: "fk", initials: "FK", color: "bg-indigo-700", name: "Folake Kassim", role: "Private residence, Maitama, Abuja", quote: "The solar integration with our gate and CCTV system means we never lose security during power cuts. The remote monitoring app is exceptional — I can see everything from London.", stars: 5 },
@@ -322,7 +388,19 @@ function Stars({ count }: { count: number }) {
   return <div className="flex gap-0.5">{Array.from({ length: count }).map((_, i) => <span key={i} className="text-[#c9a84c] text-sm">★</span>)}</div>;
 }
 function TestimonialsSection() {
+  const [testimonials, setTestimonials] = useState<FirestoreTestimonial[]>([]);
   const [videoPlaying, setVideoPlaying] = useState<string | null>(null);
+
+  useEffect(() => {
+    testimonialsApi.getVisible().then(data => {
+      if (data.length > 0) setTestimonials(data);
+    });
+  }, []);
+
+  const display = testimonials.length > 0 ? testimonials : STATIC_TESTIMONIALS.map(t => ({
+    id: t.id, name: t.name, role: t.role, quote: t.quote, stars: t.stars, initials: t.initials, color: t.color, isVisible: true, order: 0,
+  }));
+
   return (
     <section className="bg-[#f5f5f0] text-black py-24 px-8">
       <div className="max-w-6xl mx-auto">
@@ -337,12 +415,12 @@ function TestimonialsSection() {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[0, 1].map((idx) => (
-            <div key={idx} className="bg-white rounded-sm border border-black/6 p-6 flex flex-col justify-between">
-              <div><span className="text-4xl font-serif text-black/15 leading-none block mb-3">&ldquo;</span><p className="text-sm leading-relaxed text-black/70 mb-4">{TESTIMONIALS[idx].quote}</p><Stars count={TESTIMONIALS[idx].stars} /></div>
+          {display.slice(0, 2).map((t) => (
+            <div key={t.id || t.name} className="bg-white rounded-sm border border-black/6 p-6 flex flex-col justify-between">
+              <div><span className="text-4xl font-serif text-black/15 leading-none block mb-3">&ldquo;</span><p className="text-sm leading-relaxed text-black/70 mb-4">{t.quote}</p><Stars count={t.stars} /></div>
               <div className="flex items-center gap-3 mt-6 pt-5 border-t border-black/6">
-                <div className={`w-10 h-10 rounded-sm flex items-center justify-center text-xs font-bold text-white ${TESTIMONIALS[idx].color}`}>{TESTIMONIALS[idx].initials}</div>
-                <div><p className="text-sm font-bold">{TESTIMONIALS[idx].name}</p><p className="text-xs text-black/40">{TESTIMONIALS[idx].role}</p></div>
+                <div className={`w-10 h-10 rounded-sm flex items-center justify-center text-xs font-bold text-white ${t.color}`}>{t.initials}</div>
+                <div><p className="text-sm font-bold">{t.name}</p><p className="text-xs text-black/40">{t.role}</p></div>
               </div>
             </div>
           ))}
@@ -358,12 +436,12 @@ function TestimonialsSection() {
             <div className="absolute bottom-4 left-4 right-4"><Stars count={5} /><p className="text-white font-bold text-sm mt-1">Emeka Obi</p><p className="text-white/60 text-xs">Industrial Client</p></div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-sm bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center group-hover:bg-white/30 transition-colors"><span className="text-white text-lg ml-0.5">▶</span></div>
           </div>
-          {[2, 3].map((idx) => (
-            <div key={idx} className="bg-white rounded-sm border border-black/6 p-6 flex flex-col justify-between">
-              <div><span className="text-4xl font-serif text-black/15 leading-none block mb-3">&ldquo;</span><p className="text-sm leading-relaxed text-black/70 mb-4">{TESTIMONIALS[idx].quote}</p><Stars count={TESTIMONIALS[idx].stars} /></div>
+          {display.slice(2, 4).map((t) => (
+            <div key={t.id || t.name} className="bg-white rounded-sm border border-black/6 p-6 flex flex-col justify-between">
+              <div><span className="text-4xl font-serif text-black/15 leading-none block mb-3">&ldquo;</span><p className="text-sm leading-relaxed text-black/70 mb-4">{t.quote}</p><Stars count={t.stars} /></div>
               <div className="flex items-center gap-3 mt-6 pt-5 border-t border-black/6">
-                <div className={`w-10 h-10 rounded-sm flex items-center justify-center text-xs font-bold text-white ${TESTIMONIALS[idx].color}`}>{TESTIMONIALS[idx].initials}</div>
-                <div><p className="text-sm font-bold">{TESTIMONIALS[idx].name}</p><p className="text-xs text-black/40">{TESTIMONIALS[idx].role}</p></div>
+                <div className={`w-10 h-10 rounded-sm flex items-center justify-center text-xs font-bold text-white ${t.color}`}>{t.initials}</div>
+                <div><p className="text-sm font-bold">{t.name}</p><p className="text-xs text-black/40">{t.role}</p></div>
               </div>
             </div>
           ))}
@@ -372,7 +450,6 @@ function TestimonialsSection() {
     </section>
   );
 }
-
 // ─── Why Us ───────────────────────────────────────────────────────────────────
 const WHY_US = [
   { icon: "✦", title: "EEE-qualified engineers", desc: "Every installation is designed and overseen by a certified electrical engineer — not just a technician." },
@@ -456,6 +533,91 @@ function ProjectsSection() {
           <a href="#" className="self-start md:self-end text-sm font-bold text-black/50 hover:text-[#c9a84c] transition-colors">VIEW ALL PROJECTS →</a>
         </div>
         <div className="flex flex-col gap-6">{PROJECTS.map((p) => <ProjectCard key={p.id} project={p} />)}</div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Blog Section ─────────────────────────────────────────────────────────────
+function BlogSection() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    blogApi.getFeatured(3).then(data => {
+      if (data.length > 0) setPosts(data);
+    });
+  }, []);
+
+  if (posts.length === 0) return null;
+
+  return (
+    <section className="bg-[#f5f5f0] text-black py-24 px-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-3 h-3 bg-[#c9a84c] rounded-sm inline-block" />
+              <span className="text-xs font-semibold tracking-widest text-black/50 uppercase">Blogs</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold leading-tight">Insights &amp; updates</h2>
+          </div>
+          <Link href="/blog" className="text-sm font-semibold text-black/50 hover:text-[#c9a84c] transition-colors flex items-center gap-1">
+            View all blogs →
+          </Link>
+        </div>
+
+        {/* 3-column grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {posts.map(post => (
+            <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
+              <article className="bg-white rounded-sm border border-black/8 overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-lg cursor-pointer">
+                {/* Cover image */}
+                <div className="relative h-52 overflow-hidden bg-black/5">
+                  {post.coverImage ? (
+                    <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#c9a84c]/20 to-[#0d1117]/20 flex items-center justify-center">
+                      <span className="text-4xl opacity-30">📰</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="p-5">
+                  {/* Category + read time */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="inline-flex items-center bg-black text-white text-[10px] font-bold tracking-widest px-3 py-1 rounded-sm">
+                      {post.category}
+                    </span>
+                    <span className="text-xs text-black/40">{post.readTime} mins read</span>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="font-bold text-lg leading-snug mb-2 text-black">{post.title}</h3>
+
+                  {/* Excerpt */}
+                  <p className="text-sm text-black/50 leading-relaxed mb-4 line-clamp-2">{post.excerpt}</p>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-3 pt-4 border-t border-black/6">
+                    {post.authorImage ? (
+                      <img src={post.authorImage} alt={post.author} className="w-8 h-8 rounded-sm object-cover" />
+                    ) : (
+                      <div className="w-8 h-8 rounded-sm bg-[#c9a84c]/20 flex items-center justify-center text-[#c9a84c] font-bold text-xs">
+                        {post.author.charAt(0)}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-xs font-semibold text-black">{post.author}</p>
+                      <p className="text-[10px] text-black/40">{post.publishedAt || 'Recently published'}</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

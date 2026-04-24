@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { doc, updateDoc, onSnapshot } from "firebase/firestore";
+import { createContext, useContext, useEffect, useRef, useState, ReactNode } from "react";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "./AuthContext";
 
@@ -29,71 +29,118 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | null>(null);
 
-// Local storage helpers for guests
 const LS_CART = "eshmart_cart";
-const LS_FAV = "eshmart_favourites";
+const LS_FAV  = "eshmart_favourites";
 
 function loadLocal<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
-  try { return JSON.parse(localStorage.getItem(key) || "") ?? fallback; }
-  catch { return fallback; }
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 function saveLocal(key: string, val: unknown) {
-  if (typeof window !== "undefined") localStorage.setItem(key, JSON.stringify(val));
+  if (typeof window !== "undefined") {
+    localStorage.setItem(key, JSON.stringify(val));
+  }
+}
+
+async function firestoreRead(uid: string): Promise<{ cart: CartItem[]; favourites: string[] } | null> {
+  try {
+    const snap = await getDoc(doc(db, "users", uid));
+    if (snap.exists()) {
+      return { cart: snap.data().cart || [], favourites: snap.data().favourites || [] };
+    }
+    return null;
+  } catch {
+    return null; // permission-denied or network — fail silently
+  }
+}
+
+async function firestoreWrite(uid: string, cart: CartItem[], favourites: string[]) {
+  try {
+    await setDoc(doc(db, "users", uid), { cart, favourites }, { merge: true });
+  } catch {
+    // fail silently — localStorage is the source of truth
+  }
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [favourites, setFavourites] = useState<string[]>([]);
+  const prevUid = useRef<string | null>(null);
 
-  // Sync from Firestore when logged in, else localStorage
+  // On auth change: load from Firestore if logged in, else localStorage
   useEffect(() => {
+    if (authLoading) return; // wait for auth to resolve
+
     if (!user) {
+      // Logged out — load from localStorage
       setCart(loadLocal(LS_CART, []));
       setFavourites(loadLocal(LS_FAV, []));
+      prevUid.current = null;
       return;
     }
-    const ref = doc(db, "users", user.uid);
-    const unsub = onSnapshot(ref, (snap) => {
-      if (snap.exists()) {
-        setCart(snap.data().cart || []);
-        setFavourites(snap.data().favourites || []);
+
+    if (prevUid.current === user.uid) return; // same user, no reload needed
+    prevUid.current = user.uid;
+
+    // Logged in — try Firestore, fall back to localStorage
+    firestoreRead(user.uid).then((data) => {
+      if (data) {
+        setCart(data.cart);
+        setFavourites(data.favourites);
+        // Also sync to localStorage as offline cache
+        saveLocal(LS_CART, data.cart);
+        saveLocal(LS_FAV, data.favourites);
+      } else {
+        // Doc doesn't exist yet — use localStorage values
+        setCart(loadLocal(LS_CART, []));
+        setFavourites(loadLocal(LS_FAV, []));
       }
     });
-    return unsub;
-  }, [user]);
+  }, [user, authLoading]);
 
-  const persist = async (newCart: CartItem[], newFavs: string[]) => {
+  const persist = (newCart: CartItem[], newFavs: string[]) => {
+    // Always save to localStorage immediately (no async wait)
+    saveLocal(LS_CART, newCart);
+    saveLocal(LS_FAV, newFavs);
+    // Fire-and-forget Firestore sync if logged in
     if (user) {
-      await updateDoc(doc(db, "users", user.uid), { cart: newCart, favourites: newFavs });
-    } else {
-      saveLocal(LS_CART, newCart);
-      saveLocal(LS_FAV, newFavs);
+      firestoreWrite(user.uid, newCart, newFavs);
     }
   };
 
   const addToCart = (item: Omit<CartItem, "qty">) => {
-    const existing = cart.find((c) => c.slug === item.slug);
-    const newCart = existing
-      ? cart.map((c) => c.slug === item.slug ? { ...c, qty: c.qty + 1 } : c)
-      : [...cart, { ...item, qty: 1 }];
-    setCart(newCart);
-    persist(newCart, favourites);
+    setCart((prev) => {
+      const existing = prev.find((c) => c.slug === item.slug);
+      const next = existing
+        ? prev.map((c) => c.slug === item.slug ? { ...c, qty: c.qty + 1 } : c)
+        : [...prev, { ...item, qty: 1 }];
+      persist(next, favourites);
+      return next;
+    });
   };
 
   const removeFromCart = (slug: string) => {
-    const newCart = cart.filter((c) => c.slug !== slug);
-    setCart(newCart);
-    persist(newCart, favourites);
+    setCart((prev) => {
+      const next = prev.filter((c) => c.slug !== slug);
+      persist(next, favourites);
+      return next;
+    });
   };
 
   const updateQty = (slug: string, qty: number) => {
-    if (qty < 1) return removeFromCart(slug);
-    const newCart = cart.map((c) => c.slug === slug ? { ...c, qty } : c);
-    setCart(newCart);
-    persist(newCart, favourites);
+    if (qty < 1) { removeFromCart(slug); return; }
+    setCart((prev) => {
+      const next = prev.map((c) => c.slug === slug ? { ...c, qty } : c);
+      persist(next, favourites);
+      return next;
+    });
   };
 
   const clearCart = () => {
@@ -102,18 +149,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleFavourite = (slug: string) => {
-    const newFavs = favourites.includes(slug)
-      ? favourites.filter((f) => f !== slug)
-      : [...favourites, slug];
-    setFavourites(newFavs);
-    persist(cart, newFavs);
+    setFavourites((prev) => {
+      const next = prev.includes(slug) ? prev.filter((f) => f !== slug) : [...prev, slug];
+      persist(cart, next);
+      return next;
+    });
   };
 
   const isFavourite = (slug: string) => favourites.includes(slug);
 
   const cartCount = cart.reduce((sum, c) => sum + c.qty, 0);
 
-  // Parse price strings like "From ₦350,000" → number
   const cartTotal = (() => {
     const total = cart.reduce((sum, c) => {
       const num = parseInt(c.price.replace(/[^\d]/g, ""), 10) || 0;
