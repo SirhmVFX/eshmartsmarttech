@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,6 +8,46 @@ import { useCart } from "@/context/CartContext";
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQty, clearCart, cartTotal, cartCount } = useCart();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const numericTotal = cart.reduce((sum, item) => {
+    const priceNumber = Number(String(item.price).replace(/[^0-9.-]+/g, "")) || 0;
+    return sum + priceNumber * item.qty;
+  }, 0);
+
+  const handleCheckout = async () => {
+    if (!email || numericTotal <= 0) {
+      setError("Please enter a valid email address before paying.");
+      return;
+    }
+
+    setError(null);
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/paystack/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          amount: Math.round(numericTotal * 100),
+          metadata: { items: cart },
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || data.error) {
+        throw new Error(data.error || "Unable to initialize payment.");
+      }
+
+      window.location.href = data.authorizationUrl;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to start payment.");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#f5f5f0] font-sans">
@@ -75,6 +116,26 @@ export default function CartPage() {
                     <span className="font-bold text-[#c9a84c] text-lg">{cartTotal}</span>
                   </div>
                   <p className="text-black/40 text-xs mt-1">Final price confirmed after free site survey</p>
+                </div>
+                <div className="space-y-4 mb-3">
+                  <div>
+                    <label className="block text-sm font-semibold text-black/70 mb-2">Payment email</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder="customer@example.com"
+                      className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm"
+                    />
+                    {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}
+                  </div>
+                  <button
+                    onClick={handleCheckout}
+                    disabled={loading || !email}
+                    className="w-full rounded-full bg-[#c9a84c] text-black font-bold text-xs tracking-widest py-4 hover:bg-[#b8963e] transition-colors disabled:cursor-not-allowed disabled:bg-gray-300"
+                  >
+                    {loading ? "Processing payment..." : "Pay with Paystack"}
+                  </button>
                 </div>
                 <Link href="/get-a-quote"
                   className="block text-center bg-[#c9a84c] text-black font-bold text-xs tracking-widest py-4 rounded-full hover:bg-[#b8963e] transition-colors mb-3">
